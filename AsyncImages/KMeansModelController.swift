@@ -78,13 +78,13 @@ extension UIImage {
 class KMeans {
     
     let K: Int
-    private(set) var centroids = [Vector]()
+    private var centroids = [Float]()
     
     init(k: Int) {
         self.K = k
     }
     
-    private func indexOfNearestCenter(x: Vector, centers: [Vector]) -> Int {
+    private func nearestCenter(x: Vector, centers: []) -> Int {
         var nearestDist = DBL_MAX
         var minIndex = 0
         
