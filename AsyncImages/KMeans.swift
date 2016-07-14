@@ -1,5 +1,5 @@
 //
-//  KMeansModelController.swift
+//  KMeans.swift
 //  AsyncImages
 //
 //  Created by Bernardo Santana on 7/14/16.
@@ -84,7 +84,7 @@ class KMeans {
         self.K = k
     }
     
-    private func nearestCenter(x: Vector, centers: []) -> Int {
+    private func indexOfnearestCenter(x: Vector, centers: []) -> Int {
         var nearestDist = DBL_MAX
         var minIndex = 0
         

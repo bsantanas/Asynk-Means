@@ -16,7 +16,7 @@
 		64ACE17E1D36FF2600204EF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE17C1D36FF2600204EF1 /* LaunchScreen.storyboard */; };
 		64ACE1891D36FF2600204EF1 /* AsyncImagesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1881D36FF2600204EF1 /* AsyncImagesUITests.swift */; };
 		64ACE1981D37B67200204EF1 /* UIColor+CIELAB.m in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1971D37B67200204EF1 /* UIColor+CIELAB.m */; };
-		64ACE19B1D37B71300204EF1 /* KMeansModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE19A1D37B71300204EF1 /* KMeansModelController.swift */; };
+		64ACE19B1D37B71300204EF1 /* KMeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE19A1D37B71300204EF1 /* KMeans.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +45,7 @@
 		64ACE1951D37B67100204EF1 /* AsyncImages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AsyncImages-Bridging-Header.h"; sourceTree = "<group>"; };
 		64ACE1961D37B67200204EF1 /* UIColor+CIELAB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CIELAB.h"; sourceTree = "<group>"; };
 		64ACE1971D37B67200204EF1 /* UIColor+CIELAB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CIELAB.m"; sourceTree = "<group>"; };
-		64ACE19A1D37B71300204EF1 /* KMeansModelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMeansModelController.swift; sourceTree = "<group>"; };
+		64ACE19A1D37B71300204EF1 /* KMeans.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMeans.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +89,7 @@
 			children = (
 				64ACE1731D36FF2600204EF1 /* AppDelegate.swift */,
 				64ACE1751D36FF2600204EF1 /* ViewController.swift */,
-				64ACE19A1D37B71300204EF1 /* KMeansModelController.swift */,
+				64ACE19A1D37B71300204EF1 /* KMeans.swift */,
 				64ACE1771D36FF2600204EF1 /* Main.storyboard */,
 				64ACE17A1D36FF2600204EF1 /* Assets.xcassets */,
 				64ACE17C1D36FF2600204EF1 /* LaunchScreen.storyboard */,
@@ -225,7 +225,7 @@
 				640C43BA1D37E92A0083EFD8 /* CIELAB.swift in Sources */,
 				640C43B81D37E7570083EFD8 /* UIImage+CIELAB.swift in Sources */,
 				64ACE1981D37B67200204EF1 /* UIColor+CIELAB.m in Sources */,
-				64ACE19B1D37B71300204EF1 /* KMeansModelController.swift in Sources */,
+				64ACE19B1D37B71300204EF1 /* KMeans.swift in Sources */,
 				64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
