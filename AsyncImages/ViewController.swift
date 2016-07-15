@@ -10,18 +10,51 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    
+    let modelController = kMeansModelController(k: 3)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        modelController.delegate = self
+        beginLoadingImages()
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func beginLoadingImages() {
+        guard let urlStringList:[String] = urlStringsFromJSON() else { return }
+        
+        let urlList = urlStringList.map({return NSURL(string:$0)!})
+        for url in urlList {
+            NetworkManager.shared.getDataFrom(url) { data, response, error in
+                guard let data = data where error == nil else { return }
+                let clusterImage = ClusterImage(image: UIImage(data: data)!)
+                self.modelController.addImagesAndRecalculateCentroids([clusterImage])
+            }
+        }
+        
+    }
+    
+    func urlStringsFromJSON() -> [String]? {
+        if let filePath = NSBundle.mainBundle().pathForResource("images", ofType: "json") {
+        let data = NSFileManager.defaultManager().contentsAtPath(filePath)
+            do {
+                let imageURLList = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! [String]
+                return imageURLList
+            } catch let error as NSError {
+                print("Error serializing JSON file \(error)")
+            }
+        } else {
+            print("Error loading JSON file, is it in the project directory?")
+        }
+
+        return nil
     }
 
 
 }
 
+extension ViewController: kMeansMCDelegate {
+    func drawClusters(clusters: [[ClusterImage]]) {
+        
+    }
+}

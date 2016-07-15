@@ -8,14 +8,15 @@
 
 import UIKit
 
-
 // Delegate Handles all View rendering
 protocol kMeansMCDelegate: class {
-    func drawClusters(clusters:[[AveragedImage]])
+    func drawClusters(clusters:[[ClusterImage]])
 }
 
+// MARK: Custom Class
+
 // Convienence class to handle images
-class AveragedImage {
+class ClusterImage {
     let image:UIImage
     let colorAverage:ColorVector
     
@@ -26,36 +27,35 @@ class AveragedImage {
     
 }
 
-class kMeansModelController {
+// MARK: - Model Controller
 
-    let K: Int
+// Main controller. All business logic lies here
+class kMeansModelController {
+    
+    //MARK: - Public API access
+    
+    var K: Int = 3 { didSet{ recalculateCentroids() } }
+    var convergeDistance: Double = 0.001 { didSet{ recalculateCentroids() } }
+    weak var delegate:kMeansMCDelegate?
+    
+    // MARK: - Private Access
+    
+    private var images = [ClusterImage]()
     private var centroids = [ColorVector]()
+    private(set) var clusters:[[ClusterImage]] = [] // read-only
     
     init(k: Int) {
         self.K = k
     }
     
-    weak var delegate:kMeansMCDelegate?
-    
-    // Clusters
-    var clusters:[[AveragedImage]] = [] {
-        didSet {
-            delegate!.drawClusters(clusters)
-        }
-    }
-    
-    func clusterImages() {
-        let imageList = [UIImage]()
-        
-        guard imageList.count > 0 else { print("An error ocurred"); return }
-        
-        let imageObjects:[AveragedImage] = imageList.map({ image in return AveragedImage(image: image) })
+    private func recalculateCentroids() {
         
         
-    }
-    
-    
-    func trainModel(samples: [ColorVector], convergeDistance: Double) {
+        
+        guard images.count >= K else { return }
+        
+        let samples = images.map({ $0.colorAverage })
+        
         let zeroVector = ColorVector(l: 0, a: 0, b: 0)
         
         // Choose n random samples to be the initial centers
@@ -85,11 +85,27 @@ class kMeansModelController {
         } while centerOffsetDistance > convergeDistance
         
         centroids = centers
+        
+        reorganizeImagesInClusters()
+    }
+    
+    private func reorganizeImagesInClusters() {
+        
+        clusters = [[ClusterImage]](count:K, repeatedValue:[])
+        
+        for image in images {
+            let i = indexOfnearestCenter(image.colorAverage, centers: centroids)
+            clusters[i].append(image)
+        }
     }
     
     private func indexOfnearestCenter(x: ColorVector, centers: [ColorVector]) -> Int {
         var nearestDist = FLT_MAX
         var minIndex = 0
+        
+        // get the distance to each centroid
+        let dist = centers.map({$0.distanceTo(x)})
+        return dist.indexOf(dist.minElement()!)!
         
         for (idx, center) in centers.enumerate() {
             let dist = x.distanceTo(center)
@@ -103,28 +119,31 @@ class kMeansModelController {
     
     // TODO: unc fit(vector: ColorVector) -> Int
     
-    // Pick n random elements from samples
-    func randomNSamples<T>(samples: [T], n: Int) -> [T] {
-        var result = [T]()
-        var indexes = [Int]()
-        while result.count < n {
-            let index = Int(arc4random_uniform(UInt32(samples.count)))
-            guard indexes.contains(index) else { continue }
-            
-            indexes.append(index)
-            result.append(samples[index])
-        }
-        return result
-    }
-
-    
 }
 
+// MARK: - Public API
 
-// MARK:  Helper functions
 extension kMeansModelController {
     
+    func addImagesAndRecalculateCentroids(newImages:[ClusterImage]) {
+        self.images += newImages
+        recalculateCentroids()
+    }
+    
 }
 
+// Pick n random elements from samples
+func randomNSamples<T>(samples: [T], n: Int) -> [T] {
+    var result = [T]()
+    var indexes = [Int]()
+    while result.count < n {
+        let index = Int(arc4random_uniform(UInt32(samples.count)))
+        guard indexes.contains(index) else { continue }
+        
+        indexes.append(index)
+        result.append(samples[index])
+    }
+    return result
+}
 
 

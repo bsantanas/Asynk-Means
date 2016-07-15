@@ -10,6 +10,7 @@
 		640C43BA1D37E92A0083EFD8 /* ColorVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43B91D37E92A0083EFD8 /* ColorVector.swift */; };
 		640C43BC1D3932530083EFD8 /* ImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43BB1D3932530083EFD8 /* ImageProcessing.swift */; };
 		640C43BE1D39494B0083EFD8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43BD1D39494A0083EFD8 /* NetworkManager.swift */; };
+		640C43C01D396B2E0083EFD8 /* images.json in Resources */ = {isa = PBXBuildFile; fileRef = 640C43BF1D396B2E0083EFD8 /* images.json */; };
 		64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1731D36FF2600204EF1 /* AppDelegate.swift */; };
 		64ACE1761D36FF2600204EF1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1751D36FF2600204EF1 /* ViewController.swift */; };
 		64ACE1791D36FF2600204EF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE1771D36FF2600204EF1 /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 		640C43B91D37E92A0083EFD8 /* ColorVector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorVector.swift; sourceTree = "<group>"; };
 		640C43BB1D3932530083EFD8 /* ImageProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessing.swift; sourceTree = "<group>"; };
 		640C43BD1D39494A0083EFD8 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		640C43BF1D396B2E0083EFD8 /* images.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = images.json; sourceTree = "<group>"; };
 		64ACE1701D36FF2600204EF1 /* AsyncImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsyncImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64ACE1731D36FF2600204EF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64ACE1751D36FF2600204EF1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 		64ACE1991D37B67B00204EF1 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				640C43BF1D396B2E0083EFD8 /* images.json */,
 				64ACE1951D37B67100204EF1 /* AsyncImages-Bridging-Header.h */,
 				640C43B91D37E92A0083EFD8 /* ColorVector.swift */,
 				640C43BD1D39494A0083EFD8 /* NetworkManager.swift */,
@@ -200,6 +203,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				64ACE17E1D36FF2600204EF1 /* LaunchScreen.storyboard in Resources */,
+				640C43C01D396B2E0083EFD8 /* images.json in Resources */,
 				64ACE17B1D36FF2600204EF1 /* Assets.xcassets in Resources */,
 				64ACE1791D36FF2600204EF1 /* Main.storyboard in Resources */,
 			);
