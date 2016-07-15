@@ -1,5 +1,5 @@
 //
-//  CIELAB.swift
+//  ColorVector.swift
 //  AsyncImages
 //
 //  Created by Bernardo Santana on 7/14/16.
@@ -19,7 +19,7 @@ struct ColorVector {
     }
     
     init(color:UIColor) {
-        let l,a,b,alpha:CGFloat
+        var l:CGFloat=0.0,a:CGFloat=0.0,b:CGFloat=0.0,alpha:CGFloat=0.0
         color.getLightness(&l, a: &a, b: &b, alpha: &alpha)
         
         self.l = Float(l)
@@ -54,3 +54,14 @@ struct ColorVector {
     }
 }
 
+func +(lhs: ColorVector, rhs: ColorVector) -> ColorVector {
+    return ColorVector(l: lhs.l + rhs.l, a: lhs.a + rhs.a, b: lhs.b + rhs.b)
+}
+
+func /(lhs: ColorVector, rhs: Float) -> ColorVector {
+    return ColorVector(l: lhs.l/rhs, a: lhs.a/rhs, b: lhs.b/rhs)
+}
+
+func /(lhs: ColorVector, rhs: Int) -> ColorVector {
+    return lhs / Float(rhs)
+}
