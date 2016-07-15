@@ -35,7 +35,7 @@ class kMeansModelController {
     //MARK: - Public API access
     
     var K: Int = 3 { didSet{ recalculateCentroids() } }
-    var convergeDistance: Double = 0.001 { didSet{ recalculateCentroids() } }
+    var convergeDistance: Double = 0.1 { didSet{ recalculateCentroids() } }
     weak var delegate:kMeansMCDelegate?
     
     // MARK: - Private Access
@@ -49,9 +49,7 @@ class kMeansModelController {
     }
     
     private func recalculateCentroids() {
-        
-        
-        
+    
         guard images.count >= K else { return }
         
         let samples = images.map({ $0.colorAverage })
@@ -60,9 +58,10 @@ class kMeansModelController {
         
         // Choose n random samples to be the initial centers
         var centers = randomNSamples(samples, n:K)
-        var centerOffsetDistance:Double = 0.0
+        var centerOffsetDistance:Double = 0
         
         repeat {
+            
             var assignments = [[ColorVector]](count: K, repeatedValue: [])
             
             for sample in samples {
@@ -76,8 +75,12 @@ class kMeansModelController {
                 newCenters.append(center)
             }
             
+            
+            centerOffsetDistance = 0
+            
             for (idx,center) in centers.enumerate() {
-                centerOffsetDistance += Double(abs(center.distanceTo(newCenters[idx])))
+                print(center.distanceTo(newCenters[idx]))
+                centerOffsetDistance += Double(center.distanceTo(newCenters[idx]))
             }
             
             centers = newCenters
@@ -97,15 +100,13 @@ class kMeansModelController {
             let i = indexOfnearestCenter(image.colorAverage, centers: centroids)
             clusters[i].append(image)
         }
+        
+        delegate?.drawClusters(clusters)
     }
     
     private func indexOfnearestCenter(x: ColorVector, centers: [ColorVector]) -> Int {
-        var nearestDist = FLT_MAX
+        var nearestDist = Float.infinity
         var minIndex = 0
-        
-        // get the distance to each centroid
-        let dist = centers.map({$0.distanceTo(x)})
-        return dist.indexOf(dist.minElement()!)!
         
         for (idx, center) in centers.enumerate() {
             let dist = x.distanceTo(center)
@@ -116,6 +117,8 @@ class kMeansModelController {
         }
         return minIndex
     }
+    
+    
     
     // TODO: unc fit(vector: ColorVector) -> Int
     
@@ -138,7 +141,7 @@ func randomNSamples<T>(samples: [T], n: Int) -> [T] {
     var indexes = [Int]()
     while result.count < n {
         let index = Int(arc4random_uniform(UInt32(samples.count)))
-        guard indexes.contains(index) else { continue }
+        guard !indexes.contains(index) else { continue }
         
         indexes.append(index)
         result.append(samples[index])
