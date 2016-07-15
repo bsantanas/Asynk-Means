@@ -7,16 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		640C43B81D37E7570083EFD8 /* UIImage+CIELAB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43B71D37E7570083EFD8 /* UIImage+CIELAB.swift */; };
 		640C43BA1D37E92A0083EFD8 /* ColorVector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43B91D37E92A0083EFD8 /* ColorVector.swift */; };
 		640C43BC1D3932530083EFD8 /* ImageProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43BB1D3932530083EFD8 /* ImageProcessing.swift */; };
+		640C43BE1D39494B0083EFD8 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43BD1D39494A0083EFD8 /* NetworkManager.swift */; };
 		64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1731D36FF2600204EF1 /* AppDelegate.swift */; };
 		64ACE1761D36FF2600204EF1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1751D36FF2600204EF1 /* ViewController.swift */; };
 		64ACE1791D36FF2600204EF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE1771D36FF2600204EF1 /* Main.storyboard */; };
 		64ACE17B1D36FF2600204EF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE17A1D36FF2600204EF1 /* Assets.xcassets */; };
 		64ACE17E1D36FF2600204EF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE17C1D36FF2600204EF1 /* LaunchScreen.storyboard */; };
 		64ACE1891D36FF2600204EF1 /* AsyncImagesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1881D36FF2600204EF1 /* AsyncImagesUITests.swift */; };
-		64ACE1981D37B67200204EF1 /* UIColor+CIELAB.m in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1971D37B67200204EF1 /* UIColor+CIELAB.m */; };
 		64ACE19B1D37B71300204EF1 /* KMeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE19A1D37B71300204EF1 /* KMeans.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,9 +30,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		640C43B71D37E7570083EFD8 /* UIImage+CIELAB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+CIELAB.swift"; sourceTree = "<group>"; };
 		640C43B91D37E92A0083EFD8 /* ColorVector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorVector.swift; sourceTree = "<group>"; };
 		640C43BB1D3932530083EFD8 /* ImageProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageProcessing.swift; sourceTree = "<group>"; };
+		640C43BD1D39494A0083EFD8 /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		64ACE1701D36FF2600204EF1 /* AsyncImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsyncImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64ACE1731D36FF2600204EF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64ACE1751D36FF2600204EF1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -45,8 +44,6 @@
 		64ACE1881D36FF2600204EF1 /* AsyncImagesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImagesUITests.swift; sourceTree = "<group>"; };
 		64ACE18A1D36FF2600204EF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		64ACE1951D37B67100204EF1 /* AsyncImages-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AsyncImages-Bridging-Header.h"; sourceTree = "<group>"; };
-		64ACE1961D37B67200204EF1 /* UIColor+CIELAB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CIELAB.h"; sourceTree = "<group>"; };
-		64ACE1971D37B67200204EF1 /* UIColor+CIELAB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CIELAB.m"; sourceTree = "<group>"; };
 		64ACE19A1D37B71300204EF1 /* KMeans.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMeans.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -115,10 +112,8 @@
 			isa = PBXGroup;
 			children = (
 				64ACE1951D37B67100204EF1 /* AsyncImages-Bridging-Header.h */,
-				64ACE1961D37B67200204EF1 /* UIColor+CIELAB.h */,
-				64ACE1971D37B67200204EF1 /* UIColor+CIELAB.m */,
-				640C43B71D37E7570083EFD8 /* UIImage+CIELAB.swift */,
 				640C43B91D37E92A0083EFD8 /* ColorVector.swift */,
+				640C43BD1D39494A0083EFD8 /* NetworkManager.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -224,11 +219,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				640C43BE1D39494B0083EFD8 /* NetworkManager.swift in Sources */,
 				64ACE1761D36FF2600204EF1 /* ViewController.swift in Sources */,
 				640C43BA1D37E92A0083EFD8 /* ColorVector.swift in Sources */,
-				640C43B81D37E7570083EFD8 /* UIImage+CIELAB.swift in Sources */,
 				640C43BC1D3932530083EFD8 /* ImageProcessing.swift in Sources */,
-				64ACE1981D37B67200204EF1 /* UIColor+CIELAB.m in Sources */,
 				64ACE19B1D37B71300204EF1 /* KMeans.swift in Sources */,
 				64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */,
 			);

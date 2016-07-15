@@ -6,7 +6,25 @@
 //  Copyright © 2016 Bernardo Santana. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+
+// Delegate Handles all View rendering
+protocol kMeansMCDelegate: class {
+    func drawClusters(clusters:[[AveragedImage]])
+}
+
+// Convienence class to handle images
+class AveragedImage {
+    let image:UIImage
+    let colorAverage:ColorVector
+    
+    init(image:UIImage) {
+        self.image = image
+        self.colorAverage = image.averageCIELabColor()
+    }
+    
+}
 
 class kMeansModelController {
 
@@ -17,7 +35,6 @@ class kMeansModelController {
         self.K = k
     }
     
-    // Delegate Handles All View rendering
     weak var delegate:kMeansMCDelegate?
     
     // Clusters
@@ -27,13 +44,13 @@ class kMeansModelController {
         }
     }
     
-    
-    func getClusters() {
-        let imageList:[UIImage] = [] //getListOfImages()
+    func clusterImages() {
+        let imageList = [UIImage]()
+        
         guard imageList.count > 0 else { print("An error ocurred"); return }
         
         let imageObjects:[AveragedImage] = imageList.map({ image in return AveragedImage(image: image) })
- 
+        
         
     }
     
@@ -84,8 +101,7 @@ class kMeansModelController {
         return minIndex
     }
     
-    // TODO 
-    // func fit(vector: ColorVector) -> Int
+    // TODO: unc fit(vector: ColorVector) -> Int
     
     // Pick n random elements from samples
     func randomNSamples<T>(samples: [T], n: Int) -> [T] {
@@ -104,27 +120,9 @@ class kMeansModelController {
     
 }
 
-protocol kMeansMCDelegate: class {
-    func drawClusters(clusters:[[AveragedImage]])
-}
 
-class AveragedImage {
-    let image:UIImage
-    let colorAverage:Float
-    
-    init(image:UIImage) {
-        self.image = image
-        self.colorAverage = image.getCielabAverage()
-    }
-    
-}
-
-extension UIImage {
-    func getCielabAverage() -> Float {
-        
-        return 0
-    }
-    
+// MARK:  Helper functions
+extension kMeansModelController {
     
 }
 

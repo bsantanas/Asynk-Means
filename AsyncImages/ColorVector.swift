@@ -6,25 +6,16 @@
 //  Copyright © 2016 Bernardo Santana. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct ColorVector {
     let l:Float
     let a:Float
     let b:Float
-    init(l:Float,a:Float,b:Float) {
+    init(l:Float=0,a:Float=0,b:Float=0) {
         self.l = l
         self.a = a
         self.b = b
-    }
-    
-    init(color:UIColor) {
-        var l:CGFloat=0.0,a:CGFloat=0.0,b:CGFloat=0.0,alpha:CGFloat=0.0
-        color.getLightness(&l, a: &a, b: &b, alpha: &alpha)
-        
-        self.l = Float(l)
-        self.a = Float(a)
-        self.b = Float(b)
     }
     
     /**
@@ -52,6 +43,11 @@ struct ColorVector {
         
         return pow(ΔL / (kL * Sl), 2) + pow(ΔC / (kC * Sc), 2) + pow(ΔH / (kH * Sh), 2)
     }
+    
+    static func zero() -> ColorVector {
+        return ColorVector(l: 0, a: 0, b: 0)
+    }
+ 
 }
 
 func +(lhs: ColorVector, rhs: ColorVector) -> ColorVector {
