@@ -91,7 +91,7 @@ class ViewController: UIViewController {
 extension ViewController: kMeansMCDelegate {
     func drawClusters(clusters: [[ClusterImage]]) {
         
-        UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
+        UIView.animateWithDuration(1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.4, options: [], animations: {
             
             var pos = 0
             for cluster in clusters {
