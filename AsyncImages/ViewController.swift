@@ -27,6 +27,7 @@ class ViewController: UIViewController {
     }
     
     func beginLoadingImages() {
+        
         guard let urlStringList:[String] = urlStringsFromJSON() else { return }
         
         let urlList = urlStringList.map({return NSURL(string:$0)!})

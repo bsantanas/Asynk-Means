@@ -9,7 +9,7 @@ def updateJsonFile():
 		print(l)
 		data.append(l.rstrip())
 
-	jsonFile = open("images.json", "w+")
+	jsonFile = open("easy.json", "w+")
 	jsonFile.write(json.dumps(data))
 	jsonFile.close()
 	print('done, %d new urls' % len(data))
