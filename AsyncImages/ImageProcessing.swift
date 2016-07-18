@@ -1,4 +1,4 @@
-//
+ //
 //  ImageProcessing.swift
 //  AsyncImages
 //
@@ -78,8 +78,16 @@ struct RGBAPixel {
     let b: UInt8
     let a: UInt8
     
+    init(r:UInt8,g:UInt8,b:UInt8,a:UInt8){
+        self.r = r
+        self.g = g
+        self.b = b
+        self.a = a
+    }
+    
     func toColorVector() -> ColorVector {
-        let (x,y,z) = rgbToXYZ(Float(self.r)/Float(UINT8_MAX), green: Float(self.r)/Float(UINT8_MAX), blue: Float(self.r)/Float(UINT8_MAX))
+        
+        let (x,y,z) = rgbToXYZ(Float(self.r)/Float(UInt8.max), green: Float(self.g)/Float(UInt8.max), blue: Float(self.b)/Float(UInt8.max))
         let (l,a,b) = xyzToLab(x, Y: y, Z: z)
         return ColorVector(l: l, a: a, b: b)
         

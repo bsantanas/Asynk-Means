@@ -21,9 +21,14 @@ protocol kMeansMCDelegate: class {
 // MARK: - Model Controller. Public API
 extension kMeansModelController {
     
-    func addImagesAndRecalculateCentroids(newImages:[ClusterImage]) {
-        self.images += newImages
-        recalculateCentroids()
+    func recalculateCentroidsWith(newImages:[ClusterImage]?) {
+        
+        //Dispatch on background thread
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
+            if newImages != nil { self.clusterObjects = newImages! }
+            self.recalculateCentroids()
+        });
+        
     }
     
     // TODO: func fit(image: ClusterImage) -> Int
@@ -35,13 +40,13 @@ class kMeansModelController {
     
     // Public API access vars
     
-    var K: Int = 3 { didSet{ recalculateCentroids() } }
+    var K: Int = 5 { didSet{ recalculateCentroids() } }
     var convergeDistance: Double = 0.1 { didSet{ recalculateCentroids() } }
     weak var delegate:kMeansMCDelegate?
     
     // MARK: - Private
     
-    private var images = [ClusterImage]()
+    private var clusterObjects = [ClusterImage]()
     private var centroids = [ColorVector]()
     private(set) var clusters:[[ClusterImage]] = [] // read-only
     
@@ -51,9 +56,9 @@ class kMeansModelController {
     
     private func recalculateCentroids() {
     
-        guard images.count >= K else { return }
+        guard clusterObjects.count >= K else { return }
         
-        let samples = images.map({ $0.colorAverage })
+        let samples = clusterObjects.map({ $0.colorAverage })
         let zeroVector = ColorVector()
         
         // Choose n random samples to be the initial centers
@@ -79,7 +84,6 @@ class kMeansModelController {
             // Get error from previous set of clusters
             centerOffsetDistance = 0
             for (idx,center) in centers.enumerate() {
-                print(center.distanceTo(newCenters[idx]))
                 centerOffsetDistance += Double(center.distanceTo(newCenters[idx]))
             }
             
@@ -97,12 +101,15 @@ class kMeansModelController {
         
         clusters = [[ClusterImage]](count:K, repeatedValue:[])
         
-        for image in images {
+        for image in clusterObjects {
             let i = indexOfnearestCenter(image.colorAverage, centers: centroids)
             clusters[i].append(image)
         }
         
-        delegate?.drawClusters(clusters)
+        dispatch_sync(dispatch_get_main_queue(), {
+            self.delegate?.drawClusters(self.clusters)
+        })
+        
     }
     
     private func indexOfnearestCenter(x: ColorVector, centers: [ColorVector]) -> Int {
@@ -127,11 +134,12 @@ class kMeansModelController {
 
 // Convienence class to handle images
 class ClusterImage {
-    let image:UIImage
-    let colorAverage:ColorVector
     
-    init(image:UIImage) {
-        self.image = image
+    let colorAverage:ColorVector
+    let id:Int
+    
+    init(image:UIImage, id: Int) {
+        self.id = id
         self.colorAverage = image.averageCIELabColor()
     }
     
