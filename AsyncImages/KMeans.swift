@@ -8,41 +8,43 @@
 
 import UIKit
 
-// MARK: Delegate
 
 // This delegate handles all the view rendering
 protocol kMeansMCDelegate: class {
-    func drawClusters(clusters:[[ClusterImage]])
+    func drawClusters(_ clusters:[[ClusterImage]])
 }
 
+/*********************** Main controller. All business logic ************************/
 
-/***************** Main controller. All business logic lies here *****************/
-
-// MARK: - Model Controller. Public API
-extension kMeansModelController {
-    
-    func recalculateCentroidsWith(newImages:[ClusterImage]?) {
-        
-        //Dispatch on background thread
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), {
-            if newImages != nil { self.clusterObjects = newImages! }
-            self.recalculateCentroids()
-        });
-        
-    }
-    
-    // TODO: func fit(image: ClusterImage) -> Int
-    
-}
-
+// MARK: - Model Controller
 
 class kMeansModelController {
     
-    // Public API access vars
+    // MARK: Public API
     
-    var K: Int = 5 { didSet{ recalculateCentroids() } }
+    var K: Int = 5 { didSet{ recalculateCentroids() }}
     var convergeDistance: Double = 0.1 { didSet{ recalculateCentroids() } }
     weak var delegate:kMeansMCDelegate?
+    
+    func recalculateCentroidsWith(_ newImages:[ClusterImage]?) {
+        
+        //Dispatch on background thread
+        DispatchQueue.global().async {
+            if newImages != nil { self.clusterObjects = newImages! }
+            self.recalculateCentroids()
+        }
+        
+    }
+    
+    func fit(image: ClusterImage) -> Int {
+        // Todo
+        return 0
+    }
+    
+    init(k: Int) {
+        self.K = k
+    }
+    
     
     // MARK: - Private
     
@@ -50,9 +52,7 @@ class kMeansModelController {
     private var centroids = [ColorVector]()
     private(set) var clusters:[[ClusterImage]] = [] // read-only
     
-    init(k: Int) {
-        self.K = k
-    }
+    
     
     private func recalculateCentroids() {
     
@@ -68,7 +68,7 @@ class kMeansModelController {
         repeat {
             
             // Assign points to closest centers
-            var assignments = [[ColorVector]](count: K, repeatedValue: [])
+            var assignments = [[ColorVector]](repeating: [], count: K)
             for sample in samples {
                 let idx = indexOfnearestCenter(sample, centers: centers)
                 assignments[idx].append(sample)
@@ -77,13 +77,13 @@ class kMeansModelController {
             // Recalculate center of the cluster
             var newCenters = [ColorVector]()
             for cluster in assignments {
-                let center = cluster.reduce(zeroVector, combine: + ) / cluster.count
+                let center = cluster.reduce(zeroVector, + ) / cluster.count
                 newCenters.append(center)
             }
             
             // Get error from previous set of clusters
             centerOffsetDistance = 0
-            for (idx,center) in centers.enumerate() {
+            for (idx,center) in centers.enumerated() {
                 centerOffsetDistance += Double(center.distanceTo(newCenters[idx]))
             }
             
@@ -99,24 +99,24 @@ class kMeansModelController {
     
     private func reorganizeImagesInClusters() {
         
-        clusters = [[ClusterImage]](count:K, repeatedValue:[])
+        clusters = [[ClusterImage]](repeating: [], count: K)
         
         for image in clusterObjects {
             let i = indexOfnearestCenter(image.colorAverage, centers: centroids)
             clusters[i].append(image)
         }
         
-        dispatch_sync(dispatch_get_main_queue(), {
+        DispatchQueue.main.sync(execute: {
             self.delegate?.drawClusters(self.clusters)
         })
         
     }
     
-    private func indexOfnearestCenter(x: ColorVector, centers: [ColorVector]) -> Int {
+    private func indexOfnearestCenter(_ x: ColorVector, centers: [ColorVector]) -> Int {
         var nearestDist = Float.infinity
         var minIndex = 0
         
-        for (idx, center) in centers.enumerate() {
+        for (idx, center) in centers.enumerated() {
             let dist = x.distanceTo(center)
             if dist < nearestDist {
                 minIndex = idx
@@ -128,9 +128,8 @@ class kMeansModelController {
     
 }
 
-
-// MARK: - Model Class
 /******************************** Model Class *******************************/
+// MARK: - Model Class
 
 // Convienence class to handle images
 class ClusterImage {
@@ -149,7 +148,7 @@ class ClusterImage {
 /***************************** Convenience methods *******************************/
 
 // Pick n random elements from samples
-func randomNSamples<T>(samples: [T], n: Int) -> [T] {
+func randomNSamples<T>(_ samples: [T], n: Int) -> [T] {
     var result = [T]()
     var indexes = [Int]()
     while result.count < n {

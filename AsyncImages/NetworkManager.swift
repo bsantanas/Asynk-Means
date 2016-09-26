@@ -11,13 +11,15 @@ import UIKit
 class NetworkManager {
     static let shared = NetworkManager()
     
-    func getDataFrom(url: NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) {
-        NSURLSession.sharedSession().dataTaskWithURL(url) {
-            (data, response, error) in
-            dispatch_sync(dispatch_get_main_queue(), {
-                completion(data: data, response: response, error: error)
+    func getDataFrom(_ url: URL, completion: @escaping  (_ d: Data?, _ r: URLResponse?, _ e: NSError? ) -> Void) {
+        
+        let request = URLRequest(url:url)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { (data,response,error) in
+            DispatchQueue.main.sync(execute: {
+                //completion(data, response, error)
             })
-            }.resume()
+        }
+        task.resume()
     }
 
 }

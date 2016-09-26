@@ -16,19 +16,19 @@ let REFZ_O2_D65:Float = 108.883
 extension UIImage {
     
     func averageCIELabColor() -> ColorVector {
-        let width = CGImageGetWidth(self.CGImage)
-        let height = CGImageGetHeight(self.CGImage)
+        let width = self.cgImage?.width
+        let height = self.cgImage?.height
         
-        let context = createRGBAContext(width, height: height)
-        CGContextDrawImage(context, CGRect(x: 0, y: 0, width: width, height:height), self.CGImage)
+        let context = createRGBAContext(width!, height: height!)
+        context.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: width!, height:height!))
         
         // Get the RGB colors from the bitmap context, ignoring any pixels
         // that have alpha transparency.
         // Also convert the colors to the LAB color space
         var labValues = [ColorVector]()
-        labValues.reserveCapacity(Int(width * height))
+        labValues.reserveCapacity(Int(width! * height!))
         
-        let RGBToLAB: RGBAPixel -> ColorVector = {
+        let RGBToLAB: (RGBAPixel) -> ColorVector = {
             return $0.toColorVector()
         }
         
@@ -38,20 +38,20 @@ extension UIImage {
             }
         }
 
-        let color = labValues.reduce(ColorVector(), combine: +) / (width * height)
+        let color = labValues.reduce(ColorVector(), +) / (width! * height!)
         
         return color
     }
     
-    private func createRGBAContext(width: Int, height: Int) -> CGContext {
-        return CGBitmapContextCreate(
-            nil,
-            width,
-            height,
-            8,          // bits per component
-            width * 4,  // bytes per row
-            CGColorSpaceCreateDeviceRGB(),
-            CGBitmapInfo(rawValue: CGImageAlphaInfo.PremultipliedLast.rawValue).rawValue
+    fileprivate func createRGBAContext(_ width: Int, height: Int) -> CGContext {
+        return CGContext(
+            data: nil,
+            width: width,
+            height: height,
+            bitsPerComponent: 8,          // bits per component
+            bytesPerRow: width * 4,  // bytes per row
+            space: CGColorSpaceCreateDeviceRGB(),
+            bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue).rawValue
             )!
     }
     
@@ -59,9 +59,9 @@ extension UIImage {
  
      From: https://www.mikeash.com/pyblog/friday-qa-2012-08-31-obtaining-and-interpreting-image-data.html
      */ 
-    private func enumerateRGBAContext(context: CGContext, handler: (Int, Int, RGBAPixel) -> Void) {
-        let (width, height) = (CGBitmapContextGetWidth(context), CGBitmapContextGetHeight(context))
-        let data = unsafeBitCast(CGBitmapContextGetData(context), UnsafeMutablePointer<RGBAPixel>.self)
+    fileprivate func enumerateRGBAContext(_ context: CGContext, handler: (Int, Int, RGBAPixel) -> Void) {
+        let (width, height) = (context.width, context.height)
+        let data = unsafeBitCast(context.data, to: UnsafeMutablePointer<RGBAPixel>.self)
         for y in 0..<height {
             for x in 0..<width {
                 handler(x, y, data[Int(x + y * width)])
@@ -101,7 +101,7 @@ struct RGBAPixel {
  From: https://github.com/thisandagain/color
  */
 
-func rgbToXYZ(red:Float,green:Float, blue:Float) ->  (x:Float,y:Float, z:Float) {
+func rgbToXYZ(_ red:Float,green:Float, blue:Float) ->  (x:Float,y:Float, z:Float) {
     var x,y,z:Float
     var r = red, g = green, b = blue
     if(r > 0.04045) { r = pow(((r + 0.055) / 1.055),2.4); }
@@ -122,7 +122,7 @@ func rgbToXYZ(red:Float,green:Float, blue:Float) ->  (x:Float,y:Float, z:Float) 
     return (x,y,z)
 }
 
-func xyzToLab(X:Float,Y:Float, Z:Float) ->  (l:Float,a:Float,b:Float) {
+func xyzToLab(_ X:Float,Y:Float, Z:Float) ->  (l:Float,a:Float,b:Float) {
     var l,a,b: Float
     var x = X, y = Y, z = Z
     x /= REFX_O2_D65;
@@ -140,7 +140,7 @@ func xyzToLab(X:Float,Y:Float, Z:Float) ->  (l:Float,a:Float,b:Float) {
     return (l,a,b)
 }
 
-func memo<T: Hashable, U>(f: T -> U) -> T -> U {
+func memo<T: Hashable, U>(_ f: @escaping (T) -> U) -> (T) -> U {
     var cache = [T : U]()
     
     return { key in

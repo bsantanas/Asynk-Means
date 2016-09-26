@@ -21,7 +21,7 @@ struct ColorVector {
     /**
      Delta E (CIE 1994): Distance between two lightness values. More info at http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE94.html
     */
-    func distanceTo(vector:ColorVector) -> Float {
+    func distanceTo(_ vector:ColorVector) -> Float {
         let kL: Float = 1
         let kC: Float = 1
         let kH: Float = 1
