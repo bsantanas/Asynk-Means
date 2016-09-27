@@ -16,8 +16,11 @@ let REFZ_O2_D65:Float = 108.883
 extension UIImage {
     
     func averageCIELabColor() -> ColorVector {
-        let width = self.cgImage?.width
-        let height = self.cgImage?.height
+        
+        
+        // Aggressive downsampling
+        let width:Int? = 100//self.cgImage?.width
+        let height:Int? = 100//self.cgImage?.height
         
         let context = createRGBAContext(width!, height: height!)
         context.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: width!, height:height!))
@@ -32,6 +35,7 @@ extension UIImage {
             return $0.toColorVector()
         }
         
+        let start = Date()
         enumerateRGBAContext(context) { (_, _, pixel) in
             if pixel.a == UInt8.max {
                 labValues.append(RGBToLAB(pixel))
@@ -40,6 +44,7 @@ extension UIImage {
 
         let color = labValues.reduce(ColorVector(), +) / (width! * height!)
         
+        print(Date().timeIntervalSince(start),"seconds")
         return color
     }
     
@@ -62,6 +67,7 @@ extension UIImage {
     fileprivate func enumerateRGBAContext(_ context: CGContext, handler: (Int, Int, RGBAPixel) -> Void) {
         let (width, height) = (context.width, context.height)
         let data = unsafeBitCast(context.data, to: UnsafeMutablePointer<RGBAPixel>.self)
+        print(height*width)
         for y in 0..<height {
             for x in 0..<width {
                 handler(x, y, data[Int(x + y * width)])
@@ -69,6 +75,17 @@ extension UIImage {
         }
     }
     
+    func scaledImage(newSize:CGSize) -> UIImage {
+        //UIGraphicsBeginImageContext(newSize);
+        // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
+        // Pass 1.0 to force exact pixel size.
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+        self.draw(in: CGRect(x:0,y: 0,width: newSize.width,height: newSize.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        return newImage!
+        
+    }
 
 }
 

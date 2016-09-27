@@ -13,7 +13,7 @@
 		640C43C01D396B2E0083EFD8 /* easy.json in Resources */ = {isa = PBXBuildFile; fileRef = 640C43BF1D396B2E0083EFD8 /* easy.json */; };
 		640C43C61D39A8D50083EFD8 /* UIColor+CIELAB.m in Sources */ = {isa = PBXBuildFile; fileRef = 640C43C51D39A8D50083EFD8 /* UIColor+CIELAB.m */; };
 		640C43C81D39B86B0083EFD8 /* hard.json in Resources */ = {isa = PBXBuildFile; fileRef = 640C43C71D39B86B0083EFD8 /* hard.json */; };
-		640C43CA1D3A89120083EFD8 /* GridImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640C43C91D3A89120083EFD8 /* GridImageView.swift */; };
+		64628A261D9AB0430088EEE6 /* MagicStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64628A251D9AB0430088EEE6 /* MagicStrings.swift */; };
 		64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1731D36FF2600204EF1 /* AppDelegate.swift */; };
 		64ACE1761D36FF2600204EF1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64ACE1751D36FF2600204EF1 /* ViewController.swift */; };
 		64ACE1791D36FF2600204EF1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64ACE1771D36FF2600204EF1 /* Main.storyboard */; };
@@ -45,7 +45,7 @@
 		640C43C41D39A8D50083EFD8 /* UIColor+CIELAB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CIELAB.h"; sourceTree = "<group>"; };
 		640C43C51D39A8D50083EFD8 /* UIColor+CIELAB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CIELAB.m"; sourceTree = "<group>"; };
 		640C43C71D39B86B0083EFD8 /* hard.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = hard.json; sourceTree = "<group>"; };
-		640C43C91D3A89120083EFD8 /* GridImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridImageView.swift; sourceTree = "<group>"; };
+		64628A251D9AB0430088EEE6 /* MagicStrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MagicStrings.swift; sourceTree = "<group>"; };
 		64ACE1701D36FF2600204EF1 /* AsyncImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsyncImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64ACE1731D36FF2600204EF1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64ACE1751D36FF2600204EF1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -117,6 +117,7 @@
 				64ACE17C1D36FF2600204EF1 /* LaunchScreen.storyboard */,
 				64ACE17F1D36FF2600204EF1 /* Info.plist */,
 				64ACE1991D37B67B00204EF1 /* Resources */,
+				64628A251D9AB0430088EEE6 /* MagicStrings.swift */,
 			);
 			path = AsyncImages;
 			sourceTree = "<group>";
@@ -139,7 +140,6 @@
 				640C43C51D39A8D50083EFD8 /* UIColor+CIELAB.m */,
 				64ACE1951D37B67100204EF1 /* AsyncImages-Bridging-Header.h */,
 				640C43B91D37E92A0083EFD8 /* ColorVector.swift */,
-				640C43C91D3A89120083EFD8 /* GridImageView.swift */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -219,6 +219,7 @@
 				TargetAttributes = {
 					64ACE16F1D36FF2600204EF1 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = P4486LXQ42;
 						LastSwiftMigration = 0800;
 					};
 					64ACE1831D36FF2600204EF1 = {
@@ -354,11 +355,11 @@
 			files = (
 				640C43BE1D39494B0083EFD8 /* NetworkManager.swift in Sources */,
 				640C43C61D39A8D50083EFD8 /* UIColor+CIELAB.m in Sources */,
-				640C43CA1D3A89120083EFD8 /* GridImageView.swift in Sources */,
 				64ACE1761D36FF2600204EF1 /* ViewController.swift in Sources */,
 				640C43BA1D37E92A0083EFD8 /* ColorVector.swift in Sources */,
 				640C43BC1D3932530083EFD8 /* ImageProcessing.swift in Sources */,
 				64ACE19B1D37B71300204EF1 /* KMeans.swift in Sources */,
+				64628A261D9AB0430088EEE6 /* MagicStrings.swift in Sources */,
 				64ACE1741D36FF2600204EF1 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -497,6 +498,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = P4486LXQ42;
 				INFOPLIST_FILE = AsyncImages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bsantanas.AsyncImages;
@@ -513,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = P4486LXQ42;
 				INFOPLIST_FILE = AsyncImages/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bsantanas.AsyncImages;

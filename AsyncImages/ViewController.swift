@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class ViewController: UIViewController {
     
@@ -16,65 +17,88 @@ class ViewController: UIViewController {
     var nColumns:Int = 0
     var tileWidth:CGFloat = 0
     let modelController = kMeansModelController(k: 3)
-    var imageViews = [Int:GridImageView]()
+    var imageViews = [Int:UIImageView]()
+    let group = DispatchGroup()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         modelController.delegate = self
-        beginLoadingImages()
-        (nColumns,tileWidth) = getGridDimensionsFor(GRID_SIZE)
+        downloadImages()
     }
     
-    func beginLoadingImages() {
+    override func viewWillLayoutSubviews() {
+        (nColumns,tileWidth) = getGridDimensionsFor(GRID_SIZE)
+        resetGridImages()
+        super.viewWillLayoutSubviews()
+    }
+    
+    // MARK: - IBActions
+    
+    @IBAction func recalculateCentroids(_ sender: AnyObject) {
+        modelController.getCentroids()
+    }
+    
+    // MARK: - Instance methods
+    
+    func downloadImages() {
         
-        guard let urlStringList:[String] = urlStringsFromJSON() else { return }
+        var urlList = urlStringsFromJSON(name:Files.easy).shuffled()
         
-        var urlList = urlStringList.map({return URL(string:$0)!}).shuffled()
-        
-        var images = [ClusterImage]()
         for (idx,url) in urlList[0..<(GRID_SIZE)].enumerated() {
-            let request = URLRequest(url:url)
-            let task = URLSession.shared.dataTask(with: request as URLRequest) { (data,response,error) in
-
-                guard let data = data, error == nil else { return }
+            group.enter()
+            Alamofire.request(url).validate().responseData { response in
                 
-                if let image = UIImage(data: data) {
-                    
-                    DispatchQueue.main.async {
-                        
-                        let name = response?.suggestedFilename ?? url.lastPathComponent
-                        
-                        if name != "photo_unavailable.png" { // Image net bugs
-                            print(name)
-                            images.append(ClusterImage(image: image, id: idx))
-                            print("\(100 * images.count / (self.GRID_SIZE))%")
-                            let gridImageView = GridImageView(image: image,id:idx)
-                            gridImageView.contentMode = .scaleAspectFill
-                            self.imageViews[idx] = gridImageView
-                            gridImageView.frame = self.rectForTileAtIndex(idx)
-                            self.view.addSubview(gridImageView)
-                            gridImageView.alpha = 0
-                            UIView.animate(withDuration: 0.15, animations: {
-                                gridImageView.alpha = 1
-                            })
-                        }
-                        
-                        if images.count == self.GRID_SIZE {
-                            self.modelController.recalculateCentroidsWith(images)
-                            self.recalculateButton.isEnabled = true
-                        }
+                switch response.result {
+                case .success:
+                    if let data = response.result.value {
+                        self.createImageWith(data: data, atIndex: idx)
+                    } else {
+                        print("Error no data received from \(url)")
                     }
+                case .failure(let error):
+                    print("Error downloading image from \(url)",error)
                 }
             }
-            task.resume()
         }
         
-        
+        group.notify(queue: DispatchQueue.main, execute: {
+            self.modelController.getCentroids()
+            self.recalculateButton.isEnabled = true
+        })
     }
     
-    func urlStringsFromJSON() -> [String]? {
-        if let filePath = Bundle.main.path(forResource: "easy", ofType: "json") {
+    
+    func createImageWith(data:Data, atIndex index: Int) {
+        
+        guard let image = UIImage(data: data) else {
+            print("Not image data at idx \(index)")
+            return
+        }
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
+            self.modelController.add(image: image, withID: index)
+            DispatchQueue.main.async {
+                if self.imageViews[index] == nil {
+                    let gridImageView = UIImageView(image: image)
+                    gridImageView.clipsToBounds = true
+                    gridImageView.contentMode = .scaleAspectFill
+                    self.imageViews[index] = gridImageView
+                    gridImageView.frame = self.rectForTileAtIndex(index)
+                    self.view.addSubview(gridImageView)
+                    gridImageView.alpha = 0
+                    UIView.animate(withDuration: 0.15, animations: {
+                        gridImageView.alpha = 1
+                    })
+                }
+                self.group.leave()
+            }
+        }
+    }
+    
+    
+    func urlStringsFromJSON(name:Filename) -> [String] {
+        if let filePath = Bundle.main.path(forResource: name, ofType: Files.FileType.json) {
             let data = FileManager.default.contents(atPath: filePath)
             do {
                 let imageURLList = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String]
@@ -86,13 +110,29 @@ class ViewController: UIViewController {
             print("Error loading JSON file, is it in the project directory?")
         }
         
-        return nil
+        return []
     }
     
-    @IBAction func recalculateCentroids(_ sender: AnyObject) {
-        modelController.recalculateCentroidsWith(nil)
+    func getGridDimensionsFor(_ nImages:Int) -> (Int,CGFloat) {
+        let area = view.frame.width * view.frame.height / CGFloat(nImages)
+        let maxSide = sqrt(area)
+        let nTilesH = ceil(view.frame.width / maxSide)
+        return (Int(nTilesH) , view.frame.width / nTilesH)
     }
     
+    
+    func rectForTileAtIndex(_ idx:Int) -> CGRect {
+        return CGRect(x: CGFloat(idx%nColumns)*tileWidth, y: CGFloat(idx/nColumns)*tileWidth, width: tileWidth, height: tileWidth )
+    }
+    
+    func resetGridImages() {
+        for i in 0...GRID_SIZE {
+            if let imageView = self.imageViews[i] {
+                imageView.frame = self.rectForTileAtIndex(i)
+            }
+        }
+
+    }
     
 }
 
@@ -109,19 +149,8 @@ extension ViewController: kMeansMCDelegate {
                     pos += 1
                 }
             }
-        }, completion: nil)
+            }, completion: nil)
         
-    }
-    
-    func getGridDimensionsFor(_ nImages:Int) -> (Int,CGFloat) {
-        let area = view.frame.width * view.frame.height / CGFloat(nImages)
-        let maxSide = sqrt(area)
-        let nTilesH = ceil(view.frame.width / maxSide)
-        return (Int(nTilesH) , view.frame.width / nTilesH)
-    }
-    
-    func rectForTileAtIndex(_ idx:Int) -> CGRect {
-        return CGRect(x: CGFloat(idx%nColumns)*tileWidth, y: CGFloat(idx/nColumns)*tileWidth, width: tileWidth, height: tileWidth )
     }
     
 }

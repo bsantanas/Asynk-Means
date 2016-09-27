@@ -21,19 +21,36 @@ protocol kMeansMCDelegate: class {
 class kMeansModelController {
     
     // MARK: Public API
-    
-    var K: Int = 5 { didSet{ recalculateCentroids() }}
-    var convergeDistance: Double = 0.1 { didSet{ recalculateCentroids() } }
+    private(set) var clusters:[[ClusterImage]] = [] // read-only
     weak var delegate:kMeansMCDelegate?
     
-    func recalculateCentroidsWith(_ newImages:[ClusterImage]?) {
-        
-        //Dispatch on background thread
-        DispatchQueue.global().async {
-            if newImages != nil { self.clusterObjects = newImages! }
-            self.recalculateCentroids()
+    init(k: Int = 5, convergeDistance: Double = 0.1) {
+        self.convergeDistance = convergeDistance
+        self.K = k
+    }
+    
+    func change(k:Int?, convergeDistance:Double?) {
+        if let _ = k {
+            self.K = k!
         }
+        if let _ = convergeDistance {
+            self.convergeDistance = convergeDistance!
+        }
+    }
+    
+    func add(image:UIImage, withID imgID: Int) {
+        let clusterImage = ClusterImage(image: image, id: imgID)
+        self.clusterObjects.append(clusterImage)
         
+    }
+    
+    func getCentroids() {
+        if !clusterObjects.isEmpty {
+            //Dispatch on background thread
+            DispatchQueue.global().async {
+                self.recalculateCentroids()
+            }
+        }
     }
     
     func fit(image: ClusterImage) -> Int {
@@ -41,18 +58,12 @@ class kMeansModelController {
         return 0
     }
     
-    init(k: Int) {
-        self.K = k
-    }
-    
     
     // MARK: - Private
-    
+    private var K: Int = 5
+    private var convergeDistance: Double = 0.1
     private var clusterObjects = [ClusterImage]()
     private var centroids = [ColorVector]()
-    private(set) var clusters:[[ClusterImage]] = [] // read-only
-    
-    
     
     private func recalculateCentroids() {
     
